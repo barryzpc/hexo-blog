@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Yii 根据公司id来产品分表，以及读取产品表时的一些操作 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-202003/Yii根据公司id来产品分表以及读取产品表时的一些操作" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Yii 根据公司id来产品分表，以及读取产品表时的一些操作
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/03/03/1583207015907.html" class="article-date">
+  <time datetime="2020-03-03T03:43:36.000Z" itemprop="datePublished">2020-03-03</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20180314.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"></p>
+<h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><h6 id="由于业务需求要存储很多家的公司以及公司的产品详情，那我就想着根据公司的-id-来建立一一对应的产品详情表。这样便于管理，也分摊了只有一张产品表的查询压力，也会优化查询的速度。"><a href="#由于业务需求要存储很多家的公司以及公司的产品详情，那我就想着根据公司的-id-来建立一一对应的产品详情表。这样便于管理，也分摊了只有一张产品表的查询压力，也会优化查询的速度。" class="headerlink" title="由于业务需求要存储很多家的公司以及公司的产品详情，那我就想着根据公司的 id 来建立一一对应的产品详情表。这样便于管理，也分摊了只有一张产品表的查询压力，也会优化查询的速度。"></a>由于业务需求要存储很多家的公司以及公司的产品详情，那我就想着根据公司的 id 来建立一一对应的产品详情表。这样便于管理，也分摊了只有一张产品表的查询压力，也会优化查询的速度。</h6><h6 id="当然如果一个公司的产品足够多，那么也要对于该公司对应的产品表进行分表。这时分表的核心思想可以采取对产品-id-取余的方式存储、读取。这个方式在这篇笔记里就不详细说明了。"><a href="#当然如果一个公司的产品足够多，那么也要对于该公司对应的产品表进行分表。这时分表的核心思想可以采取对产品-id-取余的方式存储、读取。这个方式在这篇笔记里就不详细说明了。" class="headerlink" title="当然如果一个公司的产品足够多，那么也要对于该公司对应的产品表进行分表。这时分表的核心思想可以采取对产品 id 取余的方式存储、读取。这个方式在这篇笔记里就不详细说明了。"></a>当然如果一个公司的产品足够多，那么也要对于该公司对应的产品表进行分表。这时分表的核心思想可以采取对产品 id 取余的方式存储、读取。这个方式在这篇笔记里就不详细说明了。</h6><h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p> <code>PHP</code> <code>Yii</code> <code>MySql</code> </p>
+<h2 id="如何创建产品表"><a href="#如何创建产品表" class="headerlink" title="如何创建产品表"></a>如何创建产品表</h2><h4 id="在添加一个公司的信息时自动创建公司对应的产品表"><a href="#在添加一个公司的信息时自动创建公司对应的产品表" class="headerlink" title="在添加一个公司的信息时自动创建公司对应的产品表"></a>在添加一个公司的信息时自动创建公司对应的产品表</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//新增一个公司信息，返回公司id</span></span><br><span class="line">$companyId= <span class="keyword">$this</span>-&gt;CompanyModel()-&gt;add($data);</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">false</span> !== $companyId) &#123;</span><br><span class="line">    <span class="comment">//创建公司对应的产品表</span></span><br><span class="line">    ProductTable::create($companyId);</span><br><span class="line">    Tools::sendJson(<span class="number">0</span>, <span class="string">&quot;添加成功&quot;</span>, \Yii::$app-&gt;urlManager-&gt;createUrl([<span class="string">&#x27;company/lists&#x27;</span>]));</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    Tools::sendJson(<span class="number">40000205</span>, <span class="string">&quot;添加失败&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ProductTable-create-companyId-方法的实现"><a href="#ProductTable-create-companyId-方法的实现" class="headerlink" title="ProductTable::create($companyId) 方法的实现"></a>ProductTable::create($companyId) 方法的实现</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductTable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="built_in">static</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params">$companyId</span>)</span>&#123;</span><br><span class="line">        $tableName = <span class="string">&#x27;test_product_&#x27;</span>.$companyId;</span><br><span class="line">        $sql = &lt;&lt;&lt;EOT</span><br><span class="line">CREATE TABLE <span class="keyword">if</span> not exists `$tableName` (</span><br><span class="line">  `id` <span class="keyword">int</span>(<span class="number">11</span>) unsigned NOT <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `cid` <span class="keyword">int</span>(<span class="number">11</span>) unsigned NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;公司id&#x27;</span>,</span><br><span class="line">  `name` varchar(<span class="number">30</span>) NOT <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;产品名称&#x27;</span>,</span><br><span class="line">  `barcode` varchar(<span class="number">30</span>) NOT <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;条码&#x27;</span>,</span><br><span class="line">  `image` varchar(<span class="number">225</span>) NOT <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;产品图片&#x27;</span>,</span><br><span class="line">  `company_classify_id` <span class="keyword">int</span>(<span class="number">11</span>) unsigned NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;公司分类id&#x27;</span>,</span><br><span class="line">  `size` varchar(<span class="number">20</span>) NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;规格&#x27;</span>,</span><br><span class="line">  `expire_date` date NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;保质期&#x27;</span>,</span><br><span class="line">  `production_date` datetime NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;生产日期&#x27;</span>,</span><br><span class="line">  `batch_num` varchar(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> COMMENT <span class="string">&#x27;生产批次&#x27;</span>,</span><br><span class="line">  `status` tinyint(<span class="number">2</span>) unsigned NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;状态：0，停用；1，启用&#x27;</span>,</span><br><span class="line">  `classify_id` <span class="keyword">int</span>(<span class="number">11</span>) unsigned NOT <span class="literal">NULL</span> COMMENT <span class="string">&#x27;系统分类id&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> CURRENT_TIMESTAMP COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">DEFAULT</span> CURRENT_TIMESTAMP COMMENT <span class="string">&#x27;更新时间&#x27;</span>,</span><br><span class="line">  `created_id` <span class="keyword">int</span>(<span class="number">11</span>) unsigned <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> COMMENT <span class="string">&#x27;创建者id&#x27;</span>,</span><br><span class="line">  `updated_id` <span class="keyword">int</span>(<span class="number">11</span>) unsigned <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> COMMENT <span class="string">&#x27;更新者id&#x27;</span>,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=<span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET=utf8mb4 COMMENT=<span class="string">&#x27;公司产品信息表&#x27;</span>;</span><br><span class="line">EOT;</span><br><span class="line"></span><br><span class="line">        $connection = Yii::$app-&gt;db;</span><br><span class="line">        $command = $connection-&gt;createCommand($sql);</span><br><span class="line">        $rowCount = $command-&gt;execute();</span><br><span class="line">        <span class="keyword">return</span> $rowCount;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何调用产品表，将产品存入对应公司的产品表"><a href="#如何调用产品表，将产品存入对应公司的产品表" class="headerlink" title="如何调用产品表，将产品存入对应公司的产品表"></a>如何调用产品表，将产品存入对应公司的产品表</h2><h4 id="当添加产品信息时"><a href="#当添加产品信息时" class="headerlink" title="当添加产品信息时"></a>当添加产品信息时</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$data = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&#x27;cid&#x27;</span> =&gt; $companyId,</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; $name,</span><br><span class="line">            <span class="string">&#x27;barcode&#x27;</span> =&gt; $barcode,</span><br><span class="line">            <span class="string">&#x27;image&#x27;</span> =&gt; $res[<span class="string">&#x27;url&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;company_classify_id&#x27;</span> =&gt; $company_classify_id,</span><br><span class="line">            <span class="string">&#x27;classify_id&#x27;</span> =&gt; $classify_id,</span><br><span class="line">            <span class="string">&#x27;size&#x27;</span> =&gt; $size,</span><br><span class="line">            <span class="string">&#x27;expire_date&#x27;</span> =&gt; $expire_date,</span><br><span class="line">            <span class="string">&#x27;production_date&#x27;</span> =&gt; $production_date,</span><br><span class="line">            <span class="string">&#x27;created_id&#x27;</span> =&gt; Yii::$app-&gt;user-&gt;id,</span><br><span class="line">            <span class="string">&#x27;status&#x27;</span> =&gt; $status,</span><br><span class="line">        );</span><br><span class="line">$result = <span class="keyword">$this</span>-&gt;ProductModel($companyId)-&gt;add($data);</span><br></pre></td></tr></table></figure>
+
+<h4 id="ProductModel-companyId-的实现"><a href="#ProductModel-companyId-的实现" class="headerlink" title="ProductModel($companyId)的实现"></a>ProductModel($companyId)的实现</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">ProductModel</span>(<span class="params">$companyId</span>)</span>&#123;</span><br><span class="line">       ProductModel::resetPartitionIndex($companyId);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> ProductModel();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ProductModel-resetPartitionIndex-cid-的实现以及数据表的操作"><a href="#ProductModel-resetPartitionIndex-cid-的实现以及数据表的操作" class="headerlink" title="ProductModel::resetPartitionIndex($cid)的实现以及数据表的操作"></a>ProductModel::resetPartitionIndex($cid)的实现以及数据表的操作</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This is the model class for table &quot;&#123;&#123;%test_product&#125;&#125;&quot;.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductModel</span> <span class="keyword">extends</span> \<span class="title">common</span>\<span class="title">PopToolActiveRecord</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">static</span> <span class="keyword">private</span> $partitionIndex;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化 partitionIndex</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> $companyId</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">static</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">resetPartitionIndex</span>(<span class="params">$companyId</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">self</span>::$partitionIndex = <span class="string">&#x27;_&#x27;</span>.$companyId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将表名拼接上公司id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@inheritdoc</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">tableName</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#123;&#123;test_product&#x27;</span>.<span class="built_in">self</span>::$partitionIndex.<span class="string">&#x27;&#125;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 添加</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">$data = []</span>) </span>&#123;</span><br><span class="line">        $mix_result = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">true</span> == <span class="keyword">empty</span>($data)) &#123;</span><br><span class="line">            <span class="keyword">return</span> $mix_result;</span><br><span class="line">        &#125;</span><br><span class="line">        PopToolActiveRecord::beginTransaction();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">            $result = <span class="keyword">$this</span>-&gt;setData($data)-&gt;insert();</span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">false</span> == $result) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&quot;添加信息失败，请重试&quot;</span>, <span class="number">1004001</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            $int_adves_id = (<span class="keyword">int</span>)<span class="keyword">$this</span>-&gt;id;</span><br><span class="line"></span><br><span class="line">            PopToolActiveRecord::commit();</span><br><span class="line">            $mix_result = $int_adves_id;</span><br><span class="line">        &#125; <span class="keyword">catch</span>(\<span class="built_in">Exception</span> $e) &#123;</span><br><span class="line">            PopToolActiveRecord::rollback();</span><br><span class="line">            $mix_result = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $mix_result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">/*下面是具体对tableName进行增删改查的函数实现就不一一列出了*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ps：以前的写业务时遇到的问题以及处理方案，拿出来做一下笔记。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/03/03/1583207015907.html" data-id="ckhjzqzut0009ogfda8ue9t4e" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yii/" rel="tag">Yii</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2020/03/11/1583919217986.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            如何使用github当作自己的静态文件库
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2019/12/30/1577691418354.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">PHP遍历删除文件夹以及文件夹里的文件</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

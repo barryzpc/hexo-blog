@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    nohup不输出日志文件方法 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-201910/nohup不输出日志文件方法" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      nohup不输出日志文件方法
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2019/10/31/1572491704006.html" class="article-date">
+  <time datetime="2019-10-31T03:15:04.000Z" itemprop="datePublished">2019-10-31</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20190222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"> </p>
+<h2 id="场景描述："><a href="#场景描述：" class="headerlink" title="场景描述："></a>场景描述：</h2><h6 id="用-nohup-启动程序时，会在当前的目录下生成-nohup-log-文件。这样就会在很短的时间内将磁盘全部写满（当时的磁盘是-100G，全部写满），导致别的程序无法正常运行。（如启动：Jenkins-等）"><a href="#用-nohup-启动程序时，会在当前的目录下生成-nohup-log-文件。这样就会在很短的时间内将磁盘全部写满（当时的磁盘是-100G，全部写满），导致别的程序无法正常运行。（如启动：Jenkins-等）" class="headerlink" title="用 nohup 启动程序时，会在当前的目录下生成 nohup.log 文件。这样就会在很短的时间内将磁盘全部写满（当时的磁盘是 100G，全部写满），导致别的程序无法正常运行。（如启动：Jenkins 等）"></a>用 nohup 启动程序时，会在当前的目录下生成 nohup.log 文件。这样就会在很短的时间内将磁盘全部写满（<em>当时的磁盘是 100G，全部写满</em>），导致别的程序无法正常运行。（<em>如启动：Jenkins 等</em>）</h6><h6 id="那么如何让nohup命令不产生大量的日志文件呢"><a href="#那么如何让nohup命令不产生大量的日志文件呢" class="headerlink" title="那么如何让nohup命令不产生大量的日志文件呢"></a>那么如何让nohup命令不产生大量的日志文件呢</h6><h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>既然 nohup 会输出大量的日志。那如何让 nohup 不输出日志呢？<br>查了很多的资料发现没办法让 nohup 不输出日志。但是可以 利用liunx的黑洞/dev/null，它就像一个无底洞，所有重定向到它的信息都会消失得无影 无踪。这一点非常有用，当我们不需要回显程序的所有信息时，就可以将输出重定向到/dev/null。</p>
+<pre><code>/dev/null</code></pre>
+<p><strong>/dev/null</strong>  ： 在类Unix系统中，/dev/null，或称空设备，是一个特殊的设备文件，它丢弃一切写入其中的数据（但报告写入操作成功），读取它则会立即得到一个EOF。<br>在程序员行话，尤其是Unix系统中，/dev/null 被称为位桶(bit bucket)或者黑洞(black hole)。空设备通常被用于丢弃不需要的输出流，或作为用于输入流的空文件。当你读它的时候，它会提供无限的空字符(NULL, ASCII NUL, 0x00)。</p>
+<h2 id="操作示例"><a href="#操作示例" class="headerlink" title="操作示例"></a>操作示例</h2><pre><code> nohup java -cp WEB-INF/lib/*:WEB-INF/classes org.b3log.solo.Starter &gt;/dev/null 2&gt;&amp;1 &amp;</code></pre>
+<ul>
+<li><em>&gt;/dev/null</em> 将信息输出到/dev/null </li>
+<li> <em>2&gt;&amp;1</em> 将错误信息重定向到标准输出</li>
+<li>最后一个&amp;符号，表示程序在后台运行</li>
+</ul>
+<h2 id="关于Linux的重定向"><a href="#关于Linux的重定向" class="headerlink" title="关于Linux的重定向"></a>关于Linux的重定向</h2><ul>
+<li>0:表示标准输入</li>
+<li>1:标准输出,在一般使用时，默认的是标准输出</li>
+<li>2:标准错误信息输出</li>
+</ul>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>这样问题就得到了解决。<br>如果大神们有更好解决方案可以在写在评论中</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2019/10/31/1572491704006.html" data-id="ckhjzqzul0001ogfd6tppb44g" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nohup/" rel="tag">nohup</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2019/11/08/1573185041865.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            Tmux: linux下的分屏神器
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2019/10/29/1572338620193.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">mysql 计算两个时间的差</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    RabbitMQ的安装以及对应的PHP扩展的安装 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-202003/RabbitMQ的安装以及对应的PHP扩展的安装" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      RabbitMQ的安装以及对应的PHP扩展的安装
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/03/17/1584413384830.html" class="article-date">
+  <time datetime="2020-03-17T02:49:44.000Z" itemprop="datePublished">2020-03-17</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20180610.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"></p>
+<p>记于2019-2-27</p>
+<h6 id="环境：windows-平台，PHP7-1-9"><a href="#环境：windows-平台，PHP7-1-9" class="headerlink" title="环境：windows 平台，PHP7.1.9"></a>环境：windows 平台，PHP7.1.9</h6><h2 id="1、安装-Erlang"><a href="#1、安装-Erlang" class="headerlink" title="1、安装 Erlang"></a>1、安装 Erlang</h2><ul>
+<li>因为 RabbitMQ 是用 Erlang 语言编写，安装之前需要先安装 Erlang， 下载地址<a target="_blank" rel="noopener" href="http://www.erlang.org/downloads">http://www.erlang.org/downloads</a></li>
+</ul>
+<p><img src="https://img.hacpai.com/file/2020/03/image-b1a355b3.png" alt="image.png"></p>
+<ul>
+<li><p>我选择的是图中的版本，一直next即可</p>
+<h2 id="2、下载安装RabbitMQ"><a href="#2、下载安装RabbitMQ" class="headerlink" title="2、下载安装RabbitMQ"></a>2、下载安装RabbitMQ</h2></li>
+<li><p>下载地址<a target="_blank" rel="noopener" href="http://www.rabbitmq.com/download.html">http://www.rabbitmq.com/download.html</a></p>
+</li>
+<li><p>也是一直next</p>
+</li>
+<li><p>安装完成后并没有启动RabbitMQ，需要执行下面的操作：</p>
+</li>
+</ul>
+<p><img src="https://img.hacpai.com/file/2020/03/image-3ecf633e.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rabbitmq-plugins.bat enable rabbitmq_management</span><br><span class="line"></span><br><span class="line">rabbitmq-service.bat start</span><br></pre></td></tr></table></figure>
+
+
+<p>PS: 2019 年 2 月 12 日添加</p>
+<ul>
+<li>如果执行 rabbitmq-plugins.bat enable rabbitmq_management 报错，并且是设置好了环境变量后依然出现这个问题：</li>
+</ul>
+<p><img src="https://img.hacpai.com/file/2020/03/image-ce381e48.png" alt="image.png"></p>
+<ul>
+<li>那么就执行下面的命令后，在执行上面的命令</li>
+</ul>
+<p><img src="https://img.hacpai.com/file/2020/03/image-fe471b8d.png" alt="image.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set ERLANG_HOME&#x3D;C:\Program Files\erl10.2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可能会报错提示 但已经运行 这个时候执行<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmq-service.bat stop</span><br></pre></td></tr></table></figure></li>
+<li>访问<a target="_blank" rel="noopener" href="http://localhost:15672/">http://localhost:15672/</a> 即可。默认的帐号：guest  密码：guest</li>
+</ul>
+<p><img src="https://img.hacpai.com/file/2020/03/image-1458e7cd.png" alt="image.png"></p>
+<h2 id="3、安装PHP的rabbitMQ扩展"><a href="#3、安装PHP的rabbitMQ扩展" class="headerlink" title="3、安装PHP的rabbitMQ扩展"></a>3、安装PHP的rabbitMQ扩展</h2><h4 id="下载-dll-文件-地址-http-pecl-php-net-package-amqp"><a href="#下载-dll-文件-地址-http-pecl-php-net-package-amqp" class="headerlink" title="下载 dll 文件 地址  http://pecl.php.net/package/amqp"></a>下载 dll 文件 地址  <a target="_blank" rel="noopener" href="http://pecl.php.net/package/amqp">http://pecl.php.net/package/amqp</a></h4><ol>
+<li>先查看 PHP 版本。</li>
+</ol>
+<p><img src="https://img.hacpai.com/file/2020/03/image-51e11d34.png" alt="image.png"></p>
+<ol start="2">
+<li>选择问稳定版的 dll</li>
+</ol>
+<p><img src="https://img.hacpai.com/file/2020/03/image-1cbd4339.png" alt="image.png"></p>
+<p> 我选择的是 1.9.3 。因为 Thread Safety  enable  ,所以选择的是 TS。</p>
+<p><img src="https://img.hacpai.com/file/2020/03/image-ae7f0118.png" alt="image.png"></p>
+<ol start="3">
+<li>下载后解压</li>
+</ol>
+<p><img src="https://img.hacpai.com/file/2020/03/image-9c95aaed.png" alt="image.png"></p>
+<ol start="4">
+<li>将 php_amqp.dll 文件放在 PHP 安装目录 ext 下</li>
+</ol>
+<p><img src="https://img.hacpai.com/file/2020/03/image-6a3a5330.png" alt="image.png"></p>
+<ol start="5">
+<li>php.ini 里面添加</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extension&#x3D;php_amqp.dll</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>将 rabbitmq.4.dll 文件放在 php/php7.1.9/目录下，并在 apach 的 httpd.conf 文件中加上一句：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LoadFile &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;php&#x2F;php7.1.9&#x2F;rabbitmq.4.dll&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.hacpai.com/file/2020/03/image-861d7af8.png" alt="image.png"></p>
+<ol start="7">
+<li><p>重启 apache 和 PHP 服务。</p>
+</li>
+<li><p>访问 phpinfo();</p>
+</li>
+<li><p>有 amqp 则安装成功</p>
+</li>
+</ol>
+<p><img src="https://img.hacpai.com/file/2020/03/image-77d95e4d.png" alt="image.png"></p>
+<h2 id="4、项目中安装php-amqplib库"><a href="#4、项目中安装php-amqplib库" class="headerlink" title="4、项目中安装php-amqplib库"></a>4、项目中安装php-amqplib库</h2><h4 id="使用-composer-安装"><a href="#使用-composer-安装" class="headerlink" title="使用 composer 安装"></a>使用 composer 安装</h4><ol>
+<li>项目目录下的 composer.json 文件中增加下面内容</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;require&quot;: &#123;</span><br><span class="line">    &quot;php-amqplib&#x2F;php-amqplib&quot;: &quot;^2.8&quot;,  &#x2F;&#x2F;增加这行</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#96;&#96;&#96;&#96;</span><br><span class="line">2. 然后执行:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> composer update php-amqplib/php-amqplib。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 更加方便的做法是直接执行</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>composer require php-amqplib/php-amqplib </p>
+<pre><code>便可以直接进行安装了
+
+![image.png](https://img.hacpai.com/file/2020/03/image-b6ba5d5b.png)
+
+
+
+## 5、接下来就可以尽情的玩耍了。。。</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/03/17/1584413384830.html" data-id="ckhjzqzur0005ogfd1kv3dks1" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2020/03/17/1584424890414.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            PHP的常用工具函数
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2020/03/11/1583919217986.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">如何使用github当作自己的静态文件库</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

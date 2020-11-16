@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Apache(wamp)下配置ssl证书 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-202008/Apachewamp下配置ssl证书" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Apache(wamp)下配置ssl证书
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/04/1596512458890.html" class="article-date">
+  <time datetime="2020-08-04T03:40:58.000Z" itemprop="datePublished">2020-08-04</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20180603.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"> </p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>WAMP + SSL</p>
+<p><strong>W</strong>indow + <strong>A</strong>pache + <strong>M</strong>ySQL + <strong>P</strong>HP </p>
+<h2 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h2><ol>
+<li>在apache安装目录下打开httpd.conf文件，找到，并打开注释：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LoadModule socache_shmcb_module modules&#x2F;mod_socache_shmcb.so </span><br><span class="line">LoadModule ssl_module modules&#x2F;mod_ssl.so </span><br><span class="line">Include conf&#x2F;extra&#x2F;httpd-ssl.conf </span><br><span class="line">Include conf&#x2F;extra&#x2F;httpd-mpm.conf     &#x2F;&#x2F;若没有，可忽略该项操作</span><br></pre></td></tr></table></figure></li>
+<li>打开 conf/extra/httpd-ssl.conf</li>
+</ol>
+<p>打开 apache 安装目录下 conf/extra/httpd-ssl.conf 文件 (也可能是conf.d/ssl.conf，与操作系统及安装方式有关)， 在配置文件中查找以下配置语句:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#添加 SSL 协议支持协议，去掉不安全的协议</span><br><span class="line">SSLProtocol all -SSLv2 -SSLv3</span><br><span class="line"></span><br><span class="line"># 修改加密套件如下 不同的证书，参数不同</span><br><span class="line">SSLCipherSuite HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM   </span><br><span class="line">SSLHonorCipherOrder on</span><br><span class="line"></span><br><span class="line"># 证书公钥配置  填写绝对路径</span><br><span class="line">SSLCertificateFile cert&#x2F;public.pem</span><br><span class="line"></span><br><span class="line"># 证书私钥配置 填写绝对路径</span><br><span class="line">SSLCertificateKeyFile cert&#x2F;214873197740010.key</span><br><span class="line"></span><br><span class="line"># 证书链配置，如果该属性开头有 &#39;#&#39;字符，请删除掉</span><br><span class="line">SSLCertificateChainFile cert&#x2F;chain.pem</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>配置完成后重启apache可能会无法重启。进行一下操作可捕捉错误信息<br>退出wamp,打开cmd<br>cd C:\wamp\bin\apache\apache2.4.9\bin     //apache 的安装目录<br>httpd.exe -k install<br>httpd.exe -k start<br>检查是否报错<br>如果有报错，根据错误提示调整<br>如果没有报错 则运行<br>httpd.exe -k stop</p>
+</li>
+<li><p>启动wamp</p>
+</li>
+</ol>
+<hr>
+<h2 id="httpd-ssl-conf-完整配置精简demo"><a href="#httpd-ssl-conf-完整配置精简demo" class="headerlink" title="httpd-ssl.conf 完整配置精简demo"></a>httpd-ssl.conf 完整配置精简demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:443&gt;</span><br><span class="line">    DocumentRoot &quot;D:\project\app-test&quot;</span><br><span class="line">    ServerName www.test.com:443</span><br><span class="line">    ServerAlias www.test.com</span><br><span class="line">    ServerAdmin admin@example.com</span><br><span class="line">    &lt;Directory &quot;D:\project\app-test&quot;&gt;</span><br><span class="line">        #DirectoryIndex index-dev.php</span><br><span class="line">        Options +Indexes +Includes +FollowSymLinks +MultiViews</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Require local</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;&#x2F;Directory&gt;</span><br><span class="line">    ErrorLog &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;logs&#x2F;errors.log&quot;</span><br><span class="line">    TransferLog &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;logs&#x2F;access.log&quot;</span><br><span class="line"></span><br><span class="line">    SSLEngine on</span><br><span class="line">    SSLCertificateFile &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;cert&#x2F;public.pem&quot;</span><br><span class="line">    SSLCertificateKeyFile &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;cert&#x2F;214873197740010.key&quot;</span><br><span class="line">    SSLCertificateChainFile &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;cert&#x2F;chain.pem&quot;</span><br><span class="line">    &lt;FilesMatch &quot;\.(cgi|shtml|phtml|php)$&quot;&gt;</span><br><span class="line">        SSLOptions +StdEnvVars</span><br><span class="line">    &lt;&#x2F;FilesMatch&gt;</span><br><span class="line">    &lt;Directory &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;cgi-bin&quot;&gt;</span><br><span class="line">        SSLOptions +StdEnvVars</span><br><span class="line">    &lt;&#x2F;Directory&gt;</span><br><span class="line">    BrowserMatch &quot;MSIE [2-5]&quot; \</span><br><span class="line">             nokeepalive ssl-unclean-shutdown \</span><br><span class="line">             downgrade-1.0 force-response-1.0</span><br><span class="line">    CustomLog &quot;C:&#x2F;wamp64&#x2F;bin&#x2F;apache&#x2F;apache2.4.27&#x2F;logs&#x2F;ssl_request.log&quot; \</span><br><span class="line">              &quot;%t %h %&#123;SSL_PROTOCOL&#125;x %&#123;SSL_CIPHER&#125;x \&quot;%r\&quot; %b&quot;</span><br><span class="line">&lt;&#x2F;VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/04/1596512458890.html" data-id="ckhjzqzvn000xogfdg65n0w47" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wamp/" rel="tag">wamp</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2020/08/12/1597218334271.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            使用PHP下载网络图片或文件
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2020/08/04/1596509366225.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">Apache报错 Parent: child process 2744 exited with status 3221226356 -- Restarting</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

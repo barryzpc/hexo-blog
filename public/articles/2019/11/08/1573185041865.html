@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Tmux: linux下的分屏神器 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-201911/Tmuxlinux下的分屏神器" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Tmux: linux下的分屏神器
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2019/11/08/1573185041865.html" class="article-date">
+  <time datetime="2019-11-08T03:50:41.000Z" itemprop="datePublished">2019-11-08</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20181103.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"></p>
+<h2 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h2><h4 id="tmux（terminal-multiplexer）是Linux上的终端窗口的分屏神器。在一个终端窗口中可以分多个屏同时使用。"><a href="#tmux（terminal-multiplexer）是Linux上的终端窗口的分屏神器。在一个终端窗口中可以分多个屏同时使用。" class="headerlink" title="tmux（terminal multiplexer）是Linux上的终端窗口的分屏神器。在一个终端窗口中可以分多个屏同时使用。"></a>tmux（terminal multiplexer）是Linux上的终端窗口的分屏神器。在一个终端窗口中可以分多个屏同时使用。</h4><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h4 id="Tmux-的安装。"><a href="#Tmux-的安装。" class="headerlink" title="Tmux 的安装。"></a>Tmux 的安装。</h4><pre><code># Ubuntu
+$ sudo apt-get install tmux
+
+# CentOS
+$ sudo yum install tmux
+
+# Mac
+$ brew install tmux</code></pre>
+<h2 id="启动与退出"><a href="#启动与退出" class="headerlink" title="启动与退出"></a>启动与退出</h2><h4 id="安装完成后，键入tmux命令，就进入了-Tmux-窗口。"><a href="#安装完成后，键入tmux命令，就进入了-Tmux-窗口。" class="headerlink" title="安装完成后，键入tmux命令，就进入了 Tmux 窗口。"></a>安装完成后，键入<code>tmux</code>命令，就进入了 Tmux 窗口。</h4><pre><code>$ tmux</code></pre>
+<h4 id="按下Ctrl-d或者显式输入exit命令，就可以退出-Tmux-窗口。"><a href="#按下Ctrl-d或者显式输入exit命令，就可以退出-Tmux-窗口。" class="headerlink" title="按下Ctrl+d或者显式输入exit命令，就可以退出 Tmux 窗口。"></a>按下<code>Ctrl+d</code>或者显式输入<code>exit</code>命令，就可以退出 Tmux 窗口。</h4><pre><code>$ exit</code></pre>
+<h2 id="tmux的基础操作"><a href="#tmux的基础操作" class="headerlink" title="tmux的基础操作"></a>tmux的基础操作</h2><h4 id="基本的操作无非就是对会话、窗口、窗格进行管理，包括创建、关闭、重命名、连接、分离、选择等等。"><a href="#基本的操作无非就是对会话、窗口、窗格进行管理，包括创建、关闭、重命名、连接、分离、选择等等。" class="headerlink" title="基本的操作无非就是对会话、窗口、窗格进行管理，包括创建、关闭、重命名、连接、分离、选择等等。"></a>基本的操作无非就是对会话、窗口、窗格进行管理，包括创建、关闭、重命名、连接、分离、选择等等。</h4><p>一般使用命令和快捷键进行操作，可在系统shell终端和tmux命令模式（类似vim的命令模式）下使用命令，或者在tmux终端使用快捷键。<br>tmux默认的快捷键前缀是<strong>Ctrl+b</strong>(下文用<strong>prefix</strong>指代)，按下前缀组合键后松开，再按下命令键进行快捷操作，比如使用<strong>prefix d</strong>分离会话（应该写作<strong>prefix d</strong>而不是<strong>prefix+d，</strong>因为<strong>d</strong>键不需要与<strong>prefix</strong>同时按下）。</p>
+<h2 id="会话管理"><a href="#会话管理" class="headerlink" title="会话管理　"></a>会话管理　</h2><h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><p><code>tmux new</code>　　创建默认名称的会话（在tmux命令模式使用<strong>new</strong>命令可实现同样的功能，其他命令同理，后文不再列出tmux终端命令）</p>
+<p><code>tmux new -s mytest</code>　　创建名为mytest的会话</p>
+<p><code>tmux ls</code>　　显示会话列表</p>
+<p><code>tmux a</code>　　连接上一个会话</p>
+<p><code>tmux a -t mytest</code>　　连接指定会话</p>
+<p><code>tmux rename -t s1 s2</code>    重命名会话s1为s2</p>
+<p><code>tmux kill-session</code>　　关闭上次打开的会话</p>
+<p><code>tmux kill-session -t s1</code>　　关闭会话s1</p>
+<p><code>tmux kill-session -a -t s1</code>　　关闭除s1外的所有会话</p>
+<p><code>tmux kill-server</code>　　关闭所有会话</p>
+<h4 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h4><p><code>prefix s</code>　　列出会话，可进行切换</p>
+<p><code>prefix $</code>　　重命名会话</p>
+<p><code>prefix d</code>　　分离当前会话</p>
+<p><code>prefix D</code>　　分离指定会话</p>
+<h4 id="窗口管理"><a href="#窗口管理" class="headerlink" title="窗口管理"></a>窗口管理</h4><p><code>prefix c</code>　　创建一个新窗口</p>
+<p><code>prefix ,</code>　　重命名当前窗口</p>
+<p><code>prefix w</code>　　列出所有窗口，可进行切换</p>
+<p><code>prefix n</code>　　进入下一个窗口</p>
+<p><code>prefix p</code>　　进入上一个窗口</p>
+<p><code>prefix l</code>　　进入之前操作的窗口</p>
+<p><code>prefix 0~9</code>　　选择编号0~9对应的窗口</p>
+<p><code>prefix .</code>　　修改当前窗口索引编号</p>
+<p><code>prefix &#39;</code>　　切换至指定编号（可大于9）的窗口</p>
+<p><code>prefix f</code>　　根据显示的内容搜索窗格</p>
+<p><code>prefix &amp;</code>　　关闭当前窗口</p>
+<h4 id="窗格管理"><a href="#窗格管理" class="headerlink" title="窗格管理"></a>窗格管理</h4><p><code>prefix %</code>　　水平方向创建窗格</p>
+<p><code>prefix &quot;</code>　　垂直方向创建窗格</p>
+<p><code>prefix Up|Down|Left|Right</code>　　根据箭头方向切换窗格</p>
+<p><code>prefix q</code>　　显示窗格编号</p>
+<p><code>prefix o</code>　　顺时针切换窗格</p>
+<p><code>prefix &#125;</code>　　与下一个窗格交换位置</p>
+<p><code>prefix &#123;</code>　　与上一个窗格交换位置</p>
+<p><code>prefix x</code>　　关闭当前窗格</p>
+<p><code>prefix space(空格键)</code>　　重新排列当前窗口下的所有窗格</p>
+<p><code>prefix !</code>　　将当前窗格置于新窗口</p>
+<p><code>prefix Ctrl+o</code>　　逆时针旋转当前窗口的窗格</p>
+<p><code>prefix t</code>　　在当前窗格显示时间</p>
+<p><code>prefix z</code>　　放大当前窗格(再次按下将还原)</p>
+<p><code>prefix i</code>　　显示当前窗格信息</p>
+<h4 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h4><p><code>tmux list-key</code>　　列出所有绑定的键，等同于<strong>prefix ?</strong></p>
+<p><code>tmux list-command</code>　　列出所有命令</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2019/11/08/1573185041865.html" data-id="ckhjzqzuw000cogfd6qjs7css" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tmux/" rel="tag">tmux</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2019/11/21/1574332517065.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            如何隐藏HTTP响应头里的server和X-Powered-By
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2019/10/31/1572491704006.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">nohup不输出日志文件方法</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

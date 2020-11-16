@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    PHP使用curl实现毫秒级等待的伪异步请求 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-202007/PHP使用curl实现毫秒级等待的伪异步请求" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      PHP使用curl实现毫秒级等待的伪异步请求
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/07/16/1594914341041.html" class="article-date">
+  <time datetime="2020-07-16T15:45:41.000Z" itemprop="datePublished">2020-07-16</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20181116.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"> </p>
+<h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>在开发中会遇到这样的场景：需要做一个处理，而这个处理需要花费一定的时间，并且这个处理的结果并不是需要及时的得到结果。那么我们就可能会想到使用异步处理，来大大缩短整个流程所需要的时间。而PHP没有很好的异步支持，那么就会想到使用CURL来请求并主动断开链接，不去等待请求结果的返回来实现伪异步。</p>
+<h2 id="场景升级"><a href="#场景升级" class="headerlink" title="场景升级"></a>场景升级</h2><p>这样处理也会出现一个问题，那么我们就不得不接受要花费一定的时间在请求上。这个时间是无法省去的，那么就只能是这个时间越短越好（其实不是越短越好，因为如果时间太短链接还没有请求到就主动断开了）。而之前版本中 <code>CUROPT_TIMEOUT</code>最小设置为1。也就是说，客户端至少必须等待1秒钟。这时候我们迫切需要使用毫秒级的等待，然后断开。为整个流程节省更多的时间！</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * PHP发送异步请求 毫秒级</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@author</span> Barry</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@date</span> 2017-10-24</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $url 请求地址</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $param 请求参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $httpMethod 请求方法GET或者POST</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $header</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">static</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">makeAsyncRequest</span>(<span class="params">$url, $param, $httpMethod = <span class="string">&#x27;GET&#x27;</span>, $header=[]</span>) </span>&#123;</span><br><span class="line">        $oCurl = curl_init();</span><br><span class="line">        <span class="keyword">if</span> (stripos($url, <span class="string">&quot;https://&quot;</span>) !== <span class="literal">FALSE</span>) &#123;</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, <span class="literal">FALSE</span>);</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, <span class="literal">FALSE</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($httpMethod == <span class="string">&#x27;GET&#x27;</span>) &#123;</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_URL, $url . <span class="string">&quot;?&quot;</span> . http_build_query($param));</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_URL, $url);</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_POST, <span class="number">1</span>);</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_POSTFIELDS, http_build_query($param));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>($header)) &#123;</span><br><span class="line">            $headers = [];</span><br><span class="line">            <span class="keyword">foreach</span> ($header <span class="keyword">as</span> $k=&gt;$v)&#123;</span><br><span class="line">                $headers[] = $k.<span class="string">&quot;:&quot;</span>.$v;</span><br><span class="line">            &#125;</span><br><span class="line">            curl_setopt($oCurl, CURLOPT_HTTPHEADER, $headers);</span><br><span class="line">        &#125;</span><br><span class="line">        curl_setopt($oCurl, CURLOPT_NOSIGNAL, <span class="number">1</span>);<span class="comment">//必须加，否则在CentOS环境下面设置毫秒级会报错</span></span><br><span class="line">        curl_setopt($oCurl, CURLOPT_TIMEOUT_MS, <span class="number">30</span>);<span class="comment">//设置cURL允许执行的最长毫秒数</span></span><br><span class="line"></span><br><span class="line">        $sContent = curl_exec($oCurl);</span><br><span class="line"><span class="comment">//        print_r($sContent);exit;</span></span><br><span class="line"><span class="comment">//        $aStatus = curl_getinfo($oCurl);</span></span><br><span class="line">        curl_close($oCurl);</span><br><span class="line">        <span class="keyword">return</span> json_decode($sContent, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CentOS下设置毫秒级会报错Bug"><a href="#CentOS下设置毫秒级会报错Bug" class="headerlink" title="CentOS下设置毫秒级会报错Bug"></a>CentOS下设置毫秒级会报错Bug</h2><p>为什么在CentOS服务器下要增加这一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl_setopt($oCurl, CURLOPT_NOSIGNAL, 1);&#x2F;&#x2F;必须加，否则在CentOS环境下面设置毫秒级会报错</span><br></pre></td></tr></table></figure>
+
+
+<p>主要原因：</p>
+<blockquote>
+<p>在Linux系统上, 如果使用了系统标准的DNS解析, 则会使用SIGALARM来提供控制域名解析超时的功能，但是SIGALARM不支持小于1s的超时。</p>
+</blockquote>
+<p>分析与解决：可以阅读大神<a target="_blank" rel="noopener" href="https://www.laruence.com/">风雪之隅</a>专门这对该bug分析以及解决写的一篇文章：<a target="_blank" rel="noopener" href="https://www.laruence.com/2014/01/21/2939.html">Curl的毫秒超时的一个”Bug”</a></p>
+<h2 id="PHP更多异步实现方法"><a href="#PHP更多异步实现方法" class="headerlink" title="PHP更多异步实现方法"></a>PHP更多异步实现方法</h2><p>如果想了解更多的PHP实现异步调用方法可以去阅读<a target="_blank" rel="noopener" href="https://www.laruence.com/">风雪之隅</a>也就是大名鼎鼎的<strong>鸟哥</strong>写的一篇博客：<a target="_blank" rel="noopener" href="https://www.laruence.com/2008/04/14/318.html">PHP实现异步调用方法研究</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/07/16/1594914341041.html" data-id="ckhjzqzvk000sogfdek1g4ooy" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CURL/" rel="tag">CURL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%AF%AB%E7%A7%92%E7%BA%A7%E4%BC%AA%E5%BC%82%E6%AD%A5/" rel="tag">毫秒级伪异步</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2020/07/24/1595577454676.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            windows生产服务器下部署Flask
+          
+        </div>
+      </a>
+    
+    
+      <a href="/my-github-repos" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">我在 GitHub 上的开源项目</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

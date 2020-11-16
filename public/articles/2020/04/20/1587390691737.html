@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    PHP实现输入一个整数n，输出一个n×n蛇形矩阵 |
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-202004/PHP实现输入一个整数n输出一个nn蛇形矩阵" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      PHP实现输入一个整数n，输出一个n×n蛇形矩阵
+    </h1>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/04/20/1587390691737.html" class="article-date">
+  <time datetime="2020-04-20T13:51:31.000Z" itemprop="datePublished">2020-04-20</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+<div class="tocbot"></div>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><img src="https://img.hacpai.com/bing/20180309.jpg?imageView2/1/w/960/h/540/interlace/1/q/100"> </p>
+<h6 id="前段时间群里发了一个有意思题，自己试着简单粗暴的实现一下。"><a href="#前段时间群里发了一个有意思题，自己试着简单粗暴的实现一下。" class="headerlink" title="前段时间群里发了一个有意思题，自己试着简单粗暴的实现一下。"></a>前段时间群里发了一个有意思题，自己试着简单粗暴的实现一下。</h6><h2 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h2><h4 id="实现输入一个整数n，输出一个n×n蛇形阵。例如："><a href="#实现输入一个整数n，输出一个n×n蛇形阵。例如：" class="headerlink" title="实现输入一个整数n，输出一个n×n蛇形阵。例如："></a>实现输入一个整数n，输出一个n×n蛇形阵。例如：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;输入 3,输出：</span><br><span class="line"> 1   2   3</span><br><span class="line"> 8   9   4</span><br><span class="line"> 7   6   5</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;输入 4，输出：</span><br><span class="line"> 1    2   3   4</span><br><span class="line"> 12   13  14  5</span><br><span class="line"> 11   16  15  6</span><br><span class="line"> 10   9   8   7</span><br></pre></td></tr></table></figure>
+
+<h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><h4 id="1、观察可以发现，矩阵的值的规律是由外向内画圈依次递增的卷入（排列），这是这个题的突破口。可以按照这个依次递增的值的位置来依次赋值"><a href="#1、观察可以发现，矩阵的值的规律是由外向内画圈依次递增的卷入（排列），这是这个题的突破口。可以按照这个依次递增的值的位置来依次赋值" class="headerlink" title="1、观察可以发现，矩阵的值的规律是由外向内画圈依次递增的卷入（排列），这是这个题的突破口。可以按照这个依次递增的值的位置来依次赋值"></a>1、观察可以发现，矩阵的值的规律是由外向内画圈依次递增的卷入（排列），这是这个题的突破口。可以按照这个依次递增的值的位置来依次赋值</h4><h4 id="2、而且转的圈数为-n-除以2-也就是行数，或者是列数-，如果-n-为奇数，则向上取整，即-1"><a href="#2、而且转的圈数为-n-除以2-也就是行数，或者是列数-，如果-n-为奇数，则向上取整，即-1" class="headerlink" title="2、而且转的圈数为 n 除以2(也就是行数，或者是列数)，如果 n 为奇数，则向上取整，即+1"></a>2、而且转的圈数为 n 除以2(也就是行数，或者是列数)，如果 n 为奇数，则向上取整，即+1</h4><h2 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h2><h4 id="创建php脚本文件snake-matrix-php"><a href="#创建php脚本文件snake-matrix-php" class="headerlink" title="创建php脚本文件snake_matrix.php"></a>创建php脚本文件snake_matrix.php</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 输入一个整数n，要求输出一个n×n蛇形阵（n&lt;10），比如输入整数4，则输出如下蛇形阵：</span></span><br><span class="line"><span class="comment"> * 1    2   3   4</span></span><br><span class="line"><span class="comment"> * 12   13  14  5</span></span><br><span class="line"><span class="comment"> * 11   16  15  6</span></span><br><span class="line"><span class="comment"> * 10   9   8   7</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//收到的参数</span></span><br><span class="line">$param = getopt(<span class="string">&quot;n:&quot;</span>);</span><br><span class="line">$input_num = $param[<span class="string">&#x27;n&#x27;</span>];</span><br><span class="line">$value = <span class="number">1</span>; <span class="comment">//矩阵的第一个值</span></span><br><span class="line">$matrix_arr = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 察可以发现，矩阵的值的规律是依次递增的；这也是这个算法的突破口。</span></span><br><span class="line"><span class="comment"> * 而且转的圈数为 n 除以2(也就是行数，或者是列数)，如果 n 为奇数，则向上取整，即+1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//圈数</span></span><br><span class="line">$circle_num = ceil($input_num / <span class="number">2</span>);</span><br><span class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $circle_num; $i++) &#123;<span class="comment">//一圈一圈的来</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//用于每一圈的第一行赋值</span></span><br><span class="line">    <span class="keyword">for</span> ($j = $i; $j &lt; $input_num - $i; $j++) &#123;</span><br><span class="line">        $matrix_arr[$i][$j] = $value++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用于每圈的最后一列赋值</span></span><br><span class="line">    <span class="keyword">for</span> ($j = $i + <span class="number">1</span>; $j &lt; $input_num - $i - <span class="number">1</span>; $j++) &#123;</span><br><span class="line">        $matrix_arr[$j][$input_num - $i - <span class="number">1</span>] = $value++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用于每圈的最后一行赋值</span></span><br><span class="line">    <span class="keyword">for</span> ($j = $input_num - $i - <span class="number">1</span>; $j &gt; $i; $j--) &#123;</span><br><span class="line">        $matrix_arr[$input_num - $i - <span class="number">1</span>][$j] = $value++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用于每圈的第一列赋值</span></span><br><span class="line">    <span class="keyword">for</span> ($j = $input_num - $i - <span class="number">1</span>; $j &gt; $i; $j--) &#123;</span><br><span class="line">        $matrix_arr[$j][$i] = $value++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按照索引依次打印出来</span></span><br><span class="line"><span class="keyword">foreach</span> ($matrix_arr <span class="keyword">as</span> $key =&gt; $row_val) &#123;</span><br><span class="line">    ksort($row_val);</span><br><span class="line">    $str = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">foreach</span> ($row_val <span class="keyword">as</span> $value) &#123;</span><br><span class="line">        <span class="keyword">echo</span> $value;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot; &quot;</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span> PHP_EOL;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="运行php脚本"><a href="#运行php脚本" class="headerlink" title="运行php脚本"></a>运行php脚本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php snake_matrix.php -n 4</span><br></pre></td></tr></table></figure>
+
+<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1    2   3   4</span><br><span class="line">12   13  14  5</span><br><span class="line">11   16  15  6</span><br><span class="line">10   9   8   7</span><br></pre></td></tr></table></figure>
+
+<p>ps: 如果大家还有别的实现方式，可以在评论区贴出来，大家一起学习。语言不限</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/04/20/1587390691737.html" data-id="ckhjzqzv1000jogfdconj8zbo" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/articles/2020/04/22/1587541701093.html" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            网上收集的PHP知识点和面试汇总
+          
+        </div>
+      </a>
+    
+    
+      <a href="/articles/2020/04/16/1587017727206.html" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">转载： 你知道缓存的正确打开方式么？</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+  
+  
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

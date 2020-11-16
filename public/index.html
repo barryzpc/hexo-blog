@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    
+    浩天说</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="浩天说" type="application/atom+xml">
+</head>
+
+<body>
+<main class="content">
+  <section class="jumbotron">
+  <div class="video">
+    
+      <div class="video-frame">
+        <img src="/images/ocean/overlay-hero.png" alt="Decorative image frame">
+      </div>
+    
+    <div class="video-media">
+      <video playsinline="" autoplay="" loop="" muted="" data-autoplay=""
+             poster="/images/ocean/ocean.png" x5-video-player-type="h5">
+        <source src="/images/ocean/ocean.mp4" type="video/mp4">
+        <source src="/images/ocean/ocean.ogv" type="video/ogg">
+        <source src="/images/ocean/ocean.webm" type="video/webm">
+        <p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+    <div class="video-inner text-center text-white">
+      <h1><a href="/">浩天说</a></h1>
+      <p>路漫漫其修远兮，吾将上下而求索</p>
+      <div><img src="/images/hexo-inverted.svg" class="brand" alt="浩天说"></div>
+    </div>
+    <div class="video-learn-more">
+      <a class="anchor" href="#landingpage"><i class="fe fe-mouse"></i></a>
+    </div>
+  </div>
+</section>
+
+<div id="landingpage">
+  <section class="outer">
+    <article class="articles">
+      
+      <h1 class="page-type-title"></h1>
+      
+        
+          <article id="post-202008/PHP下使用rabbitMQ报错CalltoundefinedfunctionPhpAmqpLibWireIOsocketstrerror的问题查找与解决" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/08/03/1596442518677.html">PHP下使用rabbitMQ报错Call to undefined function PhpAmqpLib\\Wire\\IO\\socket_strerror()的问题查找与解决</a>
+    </h2>
+  
+  
+  <div class="article-topping">
+    <i class="fe fe-umbrella"></i>
+  </div>
+
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/03/1596442518677.html" class="article-date">
+  <time datetime="2020-08-03T08:15:18.000Z" itemprop="datePublished">2020-08-03</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      场景描述
+今天在一个新的环境下，部署一个项目，其中有用到rabbitMQ。但在执行过程中发现报错。错误信息：
+
+1
+2
+3
+4
+5
+6
+7
+8
+
+
+{
+    "code": 3000,
+    "message": "Call to undefined function PhpAmqpLib\\Wire\\IO\\socket_strerror()",
+    "data": {
+        "file": "D:\\project\\***\\vendor\\php-amqplib\\php-amqplib\\PhpAmqpLib\\Wire\\IO\\StreamIO.php",
+ 
+      
+      <a class="article-more-link" href="/articles/2020/08/03/1596442518677.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/03/1596442518677.html" data-id="ckhjzqzvp0011ogfdcsjm9e5d" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202008/系统更新导致PHP报错libonig.so.2cannotopensharedobjectfile...问题解决" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/08/27/1598522167215.html">系统更新导致：PHP报错 &#39;libonig.so.2: cannot open shared object file... &#39;问题解决</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/27/1598522167215.html" class="article-date">
+  <time datetime="2020-08-27T09:56:07.000Z" itemprop="datePublished">2020-08-27</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      问题描述
+今天没事查看了一下自己服务器运行的php定时推送任务的日志，发现今天的运行报错了。而之前的运行都成功了。
+
+报错信息：
+
+1
+
+
+/usr/local/php/bin/php: error while loading shared libraries: libonig.so.2: cannot open shared object file: No such file or directory
+
+
+我回想了一下肯定是昨天执行了yum -y update 这个命令更新了系统，导致一些旧的库被删除了。
+
+问题分析
+错误提示libonig.so.2找不到了。去到/usr/lib64目录下发
+      
+      <a class="article-more-link" href="/articles/2020/08/27/1598522167215.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/27/1598522167215.html" data-id="ckhjzqzvr0013ogfd9dk749iw" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202008/使用PHP下载网络图片或文件" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/08/12/1597218334271.html">使用PHP下载网络图片或文件</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/12/1597218334271.html" class="article-date">
+  <time datetime="2020-08-12T07:45:34.000Z" itemprop="datePublished">2020-08-12</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      变量说明
+1
+2
+3
+4
+5
+
+
+//图片要保存的绝对路径
+$path = '/test/test.jpg';
+
+//要下载的网络图片链接
+$img_url = 'http://az29176.vo.msecnd.net/videocontent/GrizzlyPeakSF_FF_768_HD_ZH-CN1078880766.jpg'； 
+
+
+file_get_contents下载网络图片
+1
+
+
+file_put_contents($path, file_get_contents($img_url));
+
+
+ * ps：当用file_get_contents()函数去下载带有https协议的
+      
+      <a class="article-more-link" href="/articles/2020/08/12/1597218334271.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/12/1597218334271.html" data-id="ckhjzqzvr0015ogfddrytdth3" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CURL/" rel="tag">CURL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202008/Apachewamp下配置ssl证书" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/08/04/1596512458890.html">Apache(wamp)下配置ssl证书</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/04/1596512458890.html" class="article-date">
+  <time datetime="2020-08-04T03:40:58.000Z" itemprop="datePublished">2020-08-04</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      环境
+WAMP + SSL
+
+Window + Apache + MySQL + PHP 
+
+配置步骤
+ 1. 在apache安装目录下打开httpd.conf文件，找到，并打开注释：1
+    2
+    3
+    4
+    
+    
+    LoadModule socache_shmcb_module modules/mod_socache_shmcb.so 
+    LoadModule ssl_module modules/mod_ssl.so 
+    Include conf/extra/httpd-ssl.conf 
+    Include conf/extra/http
+      
+      <a class="article-more-link" href="/articles/2020/08/04/1596512458890.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/04/1596512458890.html" data-id="ckhjzqzvn000xogfdg65n0w47" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ssl/" rel="tag">ssl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wamp/" rel="tag">wamp</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202008/Apache报错Parentchildprocess2744exitedwithstatus3221226356Restarting" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/08/04/1596509366225.html">Apache报错 Parent: child process 2744 exited with status 3221226356 -- Restarting</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/08/04/1596509366225.html" class="article-date">
+  <time datetime="2020-08-04T02:49:26.000Z" itemprop="datePublished">2020-08-04</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      问题描述
+Windows系统+apache+mysql+php环境下，访问量大的时候在apache_error.log 中出现报错：
+
+1
+
+
+Parent: child process 2744 exited with status 3221226356 -- Restarting.
+
+
+问题分析
+这是由于apache的默认堆栈值较小，所以Windows中经常会出现此问题。 当使用分配了大量堆栈的php代码时，就会发生这种情况。
+
+所以要修改堆栈大小（ThreadStackSize）。 建议将其设置为16 Mb（16777216）
+
+解决方案
+ThreadStackSize的设置是在http
+      
+      <a class="article-more-link" href="/articles/2020/08/04/1596509366225.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/08/04/1596509366225.html" data-id="ckhjzqzvp0010ogfdcs5167my" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wamp/" rel="tag">wamp</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202007/python项目依赖库的批量导出和导入" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/07/24/1595584844339.html">python项目依赖库的批量导出和导入</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/07/24/1595584844339.html" class="article-date">
+  <time datetime="2020-07-24T10:00:44.000Z" itemprop="datePublished">2020-07-24</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      场景描述
+python项目一般都会用到很多依赖环境，当我们迁移项目的时候，运行环境和运行代码都很好迁移。但是大量第三方的依赖库（自带的库就不用担心了）也需要很轻松的批量迁移。
+
+解决方案
+批量导出
+执行下面命令将依赖库到python_lib.txt文件中
+
+1
+
+
+pip freeze > python_lib.txt
+
+
+python_lib.txt 中内容大致是这样：
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+
+
+mock==4.0.2
+numpy==1.16.2
+opencv-python==4.1.1.26
+Pillow==7.1.2
+pro
+      
+      <a class="article-more-link" href="/articles/2020/07/24/1595584844339.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/07/24/1595584844339.html" data-id="ckhjzqzvl000togfdgve7acze" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202007/windows生产服务器下部署Flask" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/07/24/1595577454676.html">windows生产服务器下部署Flask</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/07/24/1595577454676.html" class="article-date">
+  <time datetime="2020-07-24T07:57:34.000Z" itemprop="datePublished">2020-07-24</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      场景描述
+很多python工程师，都会用flask 来开发、部署Web 应用。但也有很多工程师就直接使用 app.run()在生产环境上启动服务。
+
+那可能会发现 Flask 用 app.run()这种方式启动，有异常特别容易退出，而且性能很弱。
+
+生产环境下，python常见的web部署搭配是 nginx+gunicorn。
+
+但是这种搭配只适合在Linux环境下。关于这种搭配的配置方法网上有很多。反而在windows环境下该使用什么搭配来部署，网上说的比不多。而我们的项目由于某种特殊的原因就必须搭建在windows环境下，所以使用的部署方案是：Flask + Tornado+nginx。
+
+      
+      <a class="article-more-link" href="/articles/2020/07/24/1595577454676.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/07/24/1595577454676.html" data-id="ckhjzqzvn000vogfde4p99eo2" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/flask/" rel="tag">flask</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202007/PHP使用curl实现毫秒级等待的伪异步请求" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/07/16/1594914341041.html">PHP使用curl实现毫秒级等待的伪异步请求</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/07/16/1594914341041.html" class="article-date">
+  <time datetime="2020-07-16T15:45:41.000Z" itemprop="datePublished">2020-07-16</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      场景描述
+在开发中会遇到这样的场景：需要做一个处理，而这个处理需要花费一定的时间，并且这个处理的结果并不是需要及时的得到结果。那么我们就可能会想到使用异步处理，来大大缩短整个流程所需要的时间。而PHP没有很好的异步支持，那么就会想到使用CURL来请求并主动断开链接，不去等待请求结果的返回来实现伪异步。
+
+场景升级
+这样处理也会出现一个问题，那么我们就不得不接受要花费一定的时间在请求上。这个时间是无法省去的，那么就只能是这个时间越短越好（其实不是越短越好，因为如果时间太短链接还没有请求到就主动断开了）。而之前版本中 CUROPT_TIMEOUT最小设置为1。也就是说，客户端至少必须等待1秒钟。这
+      
+      <a class="article-more-link" href="/articles/2020/07/16/1594914341041.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/07/16/1594914341041.html" data-id="ckhjzqzvk000sogfdek1g4ooy" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CURL/" rel="tag">CURL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%AF%AB%E7%A7%92%E7%BA%A7%E4%BC%AA%E5%BC%82%E6%AD%A5/" rel="tag">毫秒级伪异步</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202005/我在GitHub上的开源项目" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/my-github-repos">我在 GitHub 上的开源项目</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/my-github-repos" class="article-date">
+  <time datetime="2020-05-13T03:06:50.000Z" itemprop="datePublished">2020-05-13</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      1. pic-repo 🤩1⭐️1🖖0🏠http://myblog.zhengpc.com/articles/2020/03/11/1583919217986.html
+个人图床，用来存放个人项目的静态文件库，便于直链访问
+
+
+
+
+2. nav.github.io HTML 🤩2⭐️1🖖1🏠https://nav.zhengpc.com/
+常用网站地址导航page
+
+
+
+
+3. solo-blog 🤩1⭐️0🖖0🏠https://myblog.zhengpc.com
+✍️ 浩天说 - 路漫漫其修远兮，吾将上下而求索
+
+
+
+
+4. my-solo4.3.1 FreeMarker
+      
+      <a class="article-more-link" href="/my-github-repos">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/my-github-repos" data-id="ckhjzqzvi000pogfd13vefxma" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub/" rel="tag">GitHub</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%80%E6%BA%90/" rel="tag">开源</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+          <article id="post-202004/网上收集的PHP知识点和面试汇总" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/articles/2020/04/22/1587541701093.html">网上收集的PHP知识点和面试汇总</a>
+    </h2>
+  
+  
+
+
+
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/articles/2020/04/22/1587541701093.html" class="article-date">
+  <time datetime="2020-04-22T07:48:21.000Z" itemprop="datePublished">2020-04-22</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      简书
+ 1. PHP面试题总结
+ 2. PHP面试题汇总
+ 3. MySQL存储引擎－－MyISAM与InnoDB区别
+ 4. 关于HTTP协议，一篇就够了
+
+掘金
+ 1. PHP面试总结
+
+博客园
+ 1. PHP的几种排序算法的比较
+ 2. Redis实战
+ 3. Mysql的select加锁分析
+
+酷 壳
+ 1. MYSQL性能优化的最佳20+条经验
+
+GitHub
+ 1. PHP面试问答
+
+LearnKu
+ 1. PHP 内核与原生扩展开发(译)
+ 2.  PHP 设计模式全集(译)
+ 3. PHP PSR 标准规范(译)
+
+知乎
+ 1. PHP面试题汇总
+      
+      <a class="article-more-link" href="/articles/2020/04/22/1587541701093.html">
+        阅读全文...
+      </a>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/articles/2020/04/22/1587541701093.html" data-id="ckhjzqzvg000logfdflb34w4w" class="article-share-link">
+        Share
+      </a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+        
+    </article>
+    
+  
+    
+      <nav class="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+      </nav>
+    
+  </section>
+</div>
+
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-bar-chart"></i> <span id="busuanzi_value_site_pv"></span></li>
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 浩天说</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="浩天说"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
